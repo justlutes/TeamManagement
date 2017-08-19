@@ -1,0 +1,27 @@
+{
+  "name": "team-management",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Management Portal For Teams",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/klutes90/TeamManagement.git"
+  },
+  "author": "Kyle Lutes",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/klutes90/TeamManagement/issues"
+  },
+  "homepage": "hhttps://github.com/klutes90/TeamManagement#readme",
+  "dependencies": {
+    "react": "^15.6.1",
+    "react-dom": "^15.6.1",
+    "react-scripts": "1.0.11"
+  },
+  "scripts": {
+    "start": "react-scripts start",
+    "build": "react-scripts build",
+    "test": "react-scripts test --env=jsdom",
+    "eject": "react-scripts eject"
+  }
+}
