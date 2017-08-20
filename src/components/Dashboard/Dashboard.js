@@ -1,9 +1,21 @@
-import React, { Component } from "react";
+import React from "react";
+import { graphql, gql } from "react-apollo";
+import { withRouter } from "react-router-dom";
 
-class Dashboard extends Component {
+class Dashboard extends React.Component {
   render() {
     return <div>Dashboard</div>;
   }
 }
 
-export default Dashboard;
+const userQuery = gql`
+  query userQuery {
+    user {
+      id
+    }
+  }
+`;
+
+export default graphql(userQuery, { options: { fetchPolicy: "network-only" } })(
+  withRouter(Dashboard)
+);

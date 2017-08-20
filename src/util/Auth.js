@@ -12,51 +12,42 @@ export default class Auth {
         primaryColor: "#1A237E",
         displayName: "Team Management"
       },
-      closable: false,
-      oidcConformant: true,
-      auth: {
-        redirectUrl: AUTH_CONFIG.callbackUrl,
-        responseType: "token id_token",
-        audience: `https://${AUTH_CONFIG.domain}/userinfo`,
-        params: {
-          scope: "openid profile email"
-        }
-      }
+      closable: false
     });
 
-    this.handleAuthentication();
-    this.showLock = this.showLock.bind(this);
-    this.logout = this.logout.bind(this);
-    this.isAuthenticated = this.isAuthenticated.bind(this);
-    this.isLoggedIn = this.isLoggedIn.bind(this);
-    this.requiredAuth = this.requiredAuth.bind(this);
+    this._handleAuthentication();
+    this._showLock = this._showLock.bind(this);
+    this._logout = this._logout.bind(this);
+    this._isAuthenticated = this._isAuthenticated.bind(this);
+    this._isLoggedIn = this._isLoggedIn.bind(this);
+    this._requiredAuth = this._requiredAuth.bind(this);
   }
 
-  showLock() {
+  _showLock() {
     this.lock.show({
       container: "home-lock"
     });
   }
 
-  isLoggedIn() {
+  _isLoggedIn() {
     const idToken = localStorage.getItem("auth0IdToken");
-    return !!idToken && !!this.isAuthenticated();
+    return !!idToken && !!this._isAuthenticated();
   }
 
-  requiredAuth() {
+  _requiredAuth() {
     if (!this.isLoggedIn()) {
       history.replace("/");
     }
   }
 
-  handleAuthentication() {
-    this.lock.on("authenticated", this.setSession.bind(this));
+  _handleAuthentication() {
+    this.lock.on("authenticated", this._setSession.bind(this));
     this.lock.on("authorization_error", err => {
       console.error(err);
     });
   }
 
-  setSession(authResult) {
+  _setSession(authResult) {
     if (authResult && authResult.accessToken && authResult.idToken) {
       // Set the time that the access token will expire at
       let expiresAt = JSON.stringify(
@@ -66,18 +57,18 @@ export default class Auth {
       localStorage.setItem("auth0IdToken", authResult.idToken);
       localStorage.setItem("expires_at", expiresAt);
       // navigate to the home route
-      history.replace("/dashboard");
+      history.replace("/signup");
     }
   }
 
-  logout() {
+  _logout() {
     localStorage.removeItem("access_token");
     localStorage.removeItem("auth0IdToken");
     localStorage.removeItem("expires_at");
     history.replace("/");
   }
 
-  isAuthenticated() {
+  _isAuthenticated() {
     let expiresAt = JSON.parse(localStorage.getItem("expires_at"));
     return new Date().getTime() < expiresAt;
   }

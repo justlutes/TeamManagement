@@ -1,7 +1,3 @@
-/*
-  eslint import/no-unresolved: 0, global-require: 0, import/no-extraneous-dependencies: 0
-*/
-
 import React from "react";
 import ReactDOM from "react-dom";
 import { BrowserRouter as Router, Route } from "react-router-dom";
@@ -16,6 +12,7 @@ import App from "./App";
 import history from "./util/history";
 import Auth from "./util/Auth";
 import Dashboard from "./components/Dashboard/Dashboard";
+import CreateUser from "./components/CreateUser";
 import Callback from "./components/Callback";
 import registerServiceWorker from "./registerServiceWorker";
 
@@ -52,6 +49,10 @@ const Root = () => {
             exact
             path="/"
             component={props => <App auth={auth} {...props} />}
+          />
+          <Route
+            path="/signup"
+            component={props => <CreateUser auth={auth} />}
           />
           <Route path="/callback" component={Callback} />
           <Route

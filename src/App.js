@@ -1,12 +1,29 @@
-import React, { Component } from "react";
+import React from "react";
 import { graphql, gql } from "react-apollo";
-import { withRouter } from "react-router-dom";
+import { withRouter, Redirect } from "react-router-dom";
 
-class App extends Component {
+class App extends React.Component {
   componentDidMount() {
-    this.props.auth.showLock();
+    this.props.auth._showLock();
   }
+
+  showLock = () => {
+    this.props.auth._showLock();
+  };
+
+  _isLoggedIn = () => {
+    return this.props.data.user;
+  };
+
   render() {
+    if (this.props.data.loading) {
+      return <div />;
+    }
+
+    if (this._isLoggedIn()) {
+      return <Redirect to="/dashboard" />;
+    }
+
     return <div id="home-lock" />;
   }
 }
