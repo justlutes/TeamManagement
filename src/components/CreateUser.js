@@ -10,15 +10,17 @@ class CreateUser extends React.Component {
       if (err) {
         console.error(err);
       }
+
       const variables = {
         idToken,
         email: profile.email,
-        name: profile.name
+        name: profile.name,
+        avatar: profile.picture
       };
 
       this.props
         .createUser({ variables })
-        .then(res => this.props.history.replace("/dashboar"))
+        .then(res => this.props.history.replace("/teamlist"))
         .catch(e => {
           console.error(e);
           this.props.history.replace("/");
@@ -38,19 +40,19 @@ class CreateUser extends React.Component {
       return (
         <Redirect
           to={{
-            pathname: "/dashboard"
+            pathname: "/teamlist"
           }}
         />
       );
     }
 
-    return <div>{this.createUser()}</div>;
+    return <div>{this.createUser.bind(this)}</div>;
   }
 }
 
 const createUser = gql`
-  mutation ($idToken: String!, $name: String!, $email: String!){
-    createUser(authProvider: {auth0: {idToken: $idToken}}, name: $name, email: $email) {
+  mutation ($idToken: String!, $name: String!, $email: String!, $avatar: String){
+    createUser(authProvider: {auth0: {idToken: $idToken}}, name: $name, email: $email, avatar: $avatar) {
       id
     }
   }

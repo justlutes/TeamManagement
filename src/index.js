@@ -12,8 +12,8 @@ import App from "./App";
 import history from "./util/history";
 import Auth from "./util/Auth";
 import Dashboard from "./components/Dashboard/Dashboard";
+import TeamList from "./components/TeamList/TeamList";
 import CreateUser from "./components/CreateUser";
-import Callback from "./components/Callback";
 import registerServiceWorker from "./registerServiceWorker";
 
 const auth = new Auth();
@@ -38,23 +38,25 @@ networkInterface.use([
   }
 ]);
 
-const client = new ApolloClient({ networkInterface });
+const client = new ApolloClient({
+  networkInterface,
+  dataIdFromObject: o => o.id
+});
 
 const Root = () => {
   return (
     <ApolloProvider client={client}>
       <Router history={history}>
         <div>
-          <Route
-            exact
-            path="/"
-            component={props => <App auth={auth} {...props} />}
-          />
+          <Route exact path="/" component={props => <App auth={auth} />} />
           <Route
             path="/signup"
             component={props => <CreateUser auth={auth} />}
           />
-          <Route path="/callback" component={Callback} />
+          <Route
+            path="/teamlist"
+            component={props => <TeamList auth={auth} />}
+          />
           <Route
             path="/dashboard"
             component={props => <Dashboard auth={auth} />}
