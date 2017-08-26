@@ -59,7 +59,7 @@ const Root = () => {
           />
           <Route
             path="/:id/dashboard"
-            component={props => <Dashboard auth={auth} />}
+            component={props => <Dashboard auth={auth} {...props} />}
           />
         </div>
       </Router>
