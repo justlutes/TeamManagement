@@ -1,5 +1,5 @@
 import React from "react";
-import styled from "styled-components";
+import styled, { keyframes } from "styled-components";
 import SkyLight from "react-skylight";
 import { graphql, gql } from "react-apollo";
 
@@ -9,23 +9,31 @@ class CreateTeam extends React.Component {
 
     this.state = {
       projectName: "",
-      projectDesc: ""
+      projectDesc: "",
+      error: false
     };
   }
 
   onSubmitCreateTeam = event => {
-    this.refs.createDialog.hide();
     event.preventDefault();
 
+    if (this.state.projectName === "") {
+      this.setState({ error: true });
+
+      return;
+    }
+
+    this.refs.createDialog.hide();
+
     const variables = {
-      usersIds: this.props.userId,
+      userId: this.props.data.user.id,
       name: this.state.projectName,
       description: this.state.projectDesc,
       avatar: `http://identicon.org?t=${this.state.projectName}&s=90`
     };
 
     this.props
-      .createProject({ variables })
+      .createTeam({ variables })
       .then(() => this.props.data.refetch())
       .catch(e => console.error(e));
   };
@@ -48,36 +56,140 @@ class CreateTeam extends React.Component {
         <SkyLight
           hideOnOverlayClicked
           ref="createDialog"
+          title="Create New Project"
           dialogStyles={dialogStyles}
         >
-          <h4>Create New Project</h4>
-          <form onSubmit={this.onSubmitCreateTeam}>
-            <input
-              name="project_name"
-              placeholder="Name"
-              value={this.state.projectName}
-              onChange={event =>
-                this.setState({ projectName: event.target.value })}
-            />
-            <input
-              name="project_desc"
-              placeholder="Description"
-              value={this.state.projectDesc}
-              onChange={event =>
-                this.setState({ projectDesc: event.target.value })}
-            />
+          <FormWrapper onSubmit={this.onSubmitCreateTeam}>
+            <FormGroup>
+              <FormInput
+                error={this.state.error}
+                name="project_name"
+                value={this.state.projectName}
+                onChange={event =>
+                  this.setState({
+                    projectName: event.target.value,
+                    error: false
+                  })}
+              />
+              <FormHighlight />
+              <FormBar />
+              <FormLabel>Name</FormLabel>
+            </FormGroup>
+            <FormGroup>
+              <FormInput
+                name="project_desc"
+                value={this.state.projectDesc}
+                onChange={event =>
+                  this.setState({ projectDesc: event.target.value })}
+              />
+              <FormHighlight />
+              <FormBar />
+              <FormLabel>Description</FormLabel>
+            </FormGroup>
             <ModalButtonWrapper>
               <Cancel onClick={() => this.refs.createDialog.hide()}>
                 Cancel
               </Cancel>
               <Submit type="submit">Next</Submit>
             </ModalButtonWrapper>
-          </form>
+          </FormWrapper>
         </SkyLight>
       </div>
     );
   }
 }
+
+const inputHighlighter = keyframes`
+	from {
+		background: #ba68c8;
+	}
+
+	to {
+		width: 0;
+    background: transparent;
+	}
+`;
+
+const FormHighlight = styled.span`
+  position:absolute;
+  height:60%; 
+  width:100px; 
+  top:25%; 
+  left:0;
+  pointer-events:none;
+  opacity:0.5;
+`;
+
+const FormBar = styled.span`
+  position: relative;
+  display: block;
+  width: 300px;
+  &:before, &:after {
+    content:'';
+  height:2px; 
+  width:0;
+  bottom:1px; 
+  position:absolute;
+  background:#ba68c8; 
+  transition:0.2s ease all; 
+  -moz-transition:0.2s ease all; 
+  -webkit-transition:0.2s ease all;
+}
+&:before {
+  left: 50%;
+}
+&:right {
+  right: 50%;
+}
+`;
+
+const FormLabel = styled.label`
+  color:#999; 
+  font-size:18px;
+  font-weight:normal;
+  position:absolute;
+  pointer-events:none;
+  left:5px;
+  top:10px;
+  transition:0.2s ease all; 
+`;
+
+const FormInput = styled.input`
+  font-size:18px;
+  padding:10px 10px 10px 5px;
+  display:block;
+  width:300px;
+  border:none;
+  border-bottom: ${props => (props.error ? "2px dotted #d50000" : " 1px solid #757575")};
+  &:focus {
+    outline: none;
+  }
+  &:focus ~ ${FormLabel} {
+    top:-20px;
+  font-size:14px;
+  color:#ba68c8;
+}
+&:focus ~ ${FormBar}:before,
+&:focus ~ ${FormBar}:after {
+  width: 50%:
+}
+&:focus ~ ${FormHighlight} {
+  animation: ${inputHighlighter} 0.3s ease;
+}
+`;
+
+const FormGroup = styled.div`
+  position: relative;
+  margin-bottom: 45px;
+`;
+
+const FormWrapper = styled.form`
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-start;
+  height: 200px;
+  margin-top: 30px;
+`;
 
 const Button = styled.button`
     height: 320px;
@@ -138,6 +250,7 @@ const ModalButtonWrapper = styled.div`
 
 const Cancel = styled.button`
     border: none;
+    cursor: pointer;
     text-transform: uppercase;
     width: 80px;
     height: 30px;
@@ -146,12 +259,12 @@ const Cancel = styled.button`
     background-color: transparent;
     transition: all 333ms ease-in-out;
     &:hover {
-        background-color: rgba(0, 0, 0, 0.5);
+        background-color: #ba68c8;
     }
 `;
 
 const Submit = Cancel.extend`
-    background-color: #282d4c;
+    background-color: #7b1fa2;
     color: #fff;
 `;
 
@@ -163,12 +276,28 @@ const AddProjectIcon = styled.i`
     }
 `;
 
-const createTeam = gql`
-  mutation ($name: String!, $description: String!, $avatar: String!, $usersIds: [ID!]){
-    createTeam(name: $name, description: $description, avatar: $avatar, usersIds: $usersIds) {
+const userQuery = gql`
+  query {
+    user {
       id
+      teams {
+        id
+        name
+        avatar
+        description
+      }
     }
   }
 `;
 
-export default graphql(createTeam, { name: "createTeam" })(CreateTeam);
+const createTeam = gql`
+  mutation ($name: String!, $description: String!, $avatar: String!, $userId: ID!){
+    createTeam(name: $name, avatar: $avatar, userId: $userId, description: $description) {
+    id
+    }
+  }
+`;
+
+export default graphql(createTeam, { name: "createTeam" })(
+  graphql(userQuery, { options: { fetchPolicy: "network-only" } })(CreateTeam)
+);

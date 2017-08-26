@@ -4,15 +4,17 @@ import history from "../../util/history";
 
 const Team = ({ avatar, description, id, name }) => {
   return (
-    <Button onClick={() => history.replace(`/${id}/dashboard`)}>
-      <NewCard>
-        <Avatar>
-          <AvatarImg src={avatar} />
-        </Avatar>
-        <DisplayName>{name}</DisplayName>
-        <Description>{description}</Description>
-      </NewCard>
-    </Button>
+    <div>
+      <Button onClick={() => history.replace(`/${id}/dashboard`)}>
+        <NewCard>
+          <Avatar>
+            <AvatarImg src={avatar} />
+          </Avatar>
+          <DisplayName>{name}</DisplayName>
+          <Description>{description}</Description>
+        </NewCard>
+      </Button>
+    </div>
   );
 };
 

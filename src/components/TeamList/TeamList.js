@@ -26,15 +26,13 @@ class TeamList extends React.Component {
       <Wrapper>
         <Header />
         <Grid>
-          <TeamRow
-            userID={this.props.data.user.id}
-            teams={this.props.data.user.teams}
-          />
+          <TeamRow teams={this.props.data.user.teams} />
         </Grid>
         <Footer
           auth={this.props.auth}
           name={this.props.data.user.name}
           picture={this.props.data.user.avatar}
+          fullWidth={"fullwidth"}
         />
       </Wrapper>
     );
@@ -44,7 +42,6 @@ class TeamList extends React.Component {
 const userQuery = gql`
   query {
     user {
-      id
       name
       avatar
       teams {

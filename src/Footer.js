@@ -1,10 +1,9 @@
 import React from "react";
 import styled from "styled-components";
-import { graphql, gql } from "react-apollo";
 
-const Footer = ({ auth, name, picture }) => {
+const Footer = ({ auth, name, picture, fullWidth = null }) => {
   return (
-    <UserMenu>
+    <UserMenu fullWidth={fullWidth}>
       <UserBox>
         <Img src={picture} />
         <UserDetails>
@@ -18,15 +17,6 @@ const Footer = ({ auth, name, picture }) => {
   );
 };
 
-const userQuery = gql`
-  query userQuery {
-    user {
-      name
-      avatar
-    }
-  }
-`;
-
 const UserMenu = styled.div`
     background-color: #4a148c;
     color: #fff;
@@ -34,7 +24,7 @@ const UserMenu = styled.div`
     position: absolute;
     bottom: 0;
     left: 0;
-    width: 300px;
+    width: ${props => (props.fullWidth ? "100%" : "300px")};
 `;
 
 const UserBox = styled.div`
@@ -98,6 +88,4 @@ const Button = styled.button`
     }
 `;
 
-export default graphql(userQuery, { options: { fetchPolicy: "network-only" } })(
-  Footer
-);
+export default Footer;

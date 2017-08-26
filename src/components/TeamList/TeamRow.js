@@ -4,9 +4,9 @@ import styled from "styled-components";
 import CreateTeam from "./CreateTeam";
 import Team from "./Team";
 
-const TeamRow = ({ userID, teams }) => {
+const TeamRow = ({ teams }) => {
   if (!teams) {
-    return <CreateTeam userID={userID} />;
+    return <CreateTeam />;
   }
   return (
     <TeamGrid>
@@ -19,7 +19,7 @@ const TeamRow = ({ userID, teams }) => {
           avatar={team.avatar}
         />
       ))}
-      <CreateTeam userID={userID} />
+      <CreateTeam />
     </TeamGrid>
   );
 };
@@ -31,7 +31,8 @@ const TeamGrid = styled.div`
     padding: 20px;
     overflow: auto;
     background-color: transparent;
-    justify-content: space-evenly;
+    justify-content: space-around;
+    margin-top: 30px;
 `;
 
 export default TeamRow;

@@ -46,7 +46,7 @@ class CreateUser extends React.Component {
       );
     }
 
-    return <div>{this.createUser.bind(this)}</div>;
+    return <div>{this.createUser()}</div>;
   }
 }
 

@@ -58,7 +58,7 @@ const Root = () => {
             component={props => <TeamList auth={auth} />}
           />
           <Route
-            path="/dashboard"
+            path="/:id/dashboard"
             component={props => <Dashboard auth={auth} />}
           />
         </div>
