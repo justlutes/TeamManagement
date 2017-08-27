@@ -14,6 +14,7 @@ import Auth from "./util/Auth";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TeamList from "./components/TeamList/TeamList";
 import CreateUser from "./components/CreateUser";
+import Members from "./components/Members/Members";
 import NoMatch from "./NoMatch";
 import registerServiceWorker from "./registerServiceWorker";
 
@@ -61,6 +62,10 @@ const Root = () => {
           <Route
             path="/:teamId/dashboard"
             component={props => <Dashboard auth={auth} {...props} />}
+          />
+          <Route
+            path="/:teamId/addmembers"
+            component={props => <Members auth={auth} {...props} />}
           />
           <Route component={NoMatch} />
         </div>
