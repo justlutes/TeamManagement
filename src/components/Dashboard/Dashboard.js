@@ -1,6 +1,7 @@
 import React from "react";
 import { graphql, gql } from "react-apollo";
 import { withRouter } from "react-router-dom";
+import Loading from "react-loading-animation";
 import styled from "styled-components";
 
 import DashboardMenu from "./DashboardMenu";
@@ -9,7 +10,7 @@ import DashboardHeader from "./DashboardHeader";
 class Dashboard extends React.Component {
   render() {
     if (this.props.data.loading) {
-      return <div>Loading...</div>;
+      return <Loading style={loadingStyle} />;
     }
 
     return (
@@ -28,6 +29,10 @@ class Dashboard extends React.Component {
     );
   }
 }
+
+const loadingStyle = {
+  top: "50vh"
+};
 
 const Wrapper = styled.div`
   display: flex;
@@ -51,6 +56,6 @@ const teamQuery = gql`
 
 export default graphql(teamQuery, {
   options: props => {
-    return { variables: { id: props.match.params.id } };
+    return { variables: { id: props.match.params.teamId } };
   }
 })(withRouter(Dashboard));

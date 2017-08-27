@@ -39,12 +39,12 @@ const Button = styled.button`
 `;
 
 const NewCard = styled.div`
-    background: #3949ab;
+    background: #7b1fa2;
     width: 260px;
     height: 320px;
     margin-right: 20px;
     margin-bottom: 20px;
-    color: #fff;
+    color: rgba(0, 0, 0, 0.5);
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -70,11 +70,13 @@ const DisplayName = styled.span`
     text-overflow: ellipsis;
     text-align: center;
     padding: 0 10px;
+    color: #fff;
 `;
 
 const Description = styled.p`
     padding-bottom: 10px;
     text-align: none;
+    color: #fff;
 `;
 
 export default Team;

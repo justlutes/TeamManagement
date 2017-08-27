@@ -24,9 +24,7 @@ export default class Auth {
   }
 
   _showLock() {
-    this.lock.show({
-      container: "home-lock"
-    });
+    this.lock.show();
   }
 
   _isLoggedIn() {

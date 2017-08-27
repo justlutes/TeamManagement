@@ -20,7 +20,9 @@ class CreateUser extends React.Component {
 
       this.props
         .createUser({ variables })
-        .then(res => this.props.history.replace("/teamlist"))
+        .then(res =>
+          this.props.history.replace(`/${this.props.data.user.id}/teamlist`)
+        )
         .catch(e => {
           console.error(e);
           this.props.history.replace("/");
@@ -40,7 +42,7 @@ class CreateUser extends React.Component {
       return (
         <Redirect
           to={{
-            pathname: "/teamlist"
+            pathname: `/${this.props.data.user.id}/teamlist`
           }}
         />
       );
@@ -66,8 +68,12 @@ const userQuery = gql`
   }
 `;
 
-export default graphql(createUser, { name: "createUser" })(
-  graphql(userQuery, { options: { fetchPolicy: "network-only" } })(
-    withRouter(CreateUser)
-  )
+// export default graphql(createUser, { name: "createUser" })(
+//   graphql(userQuery, { options: { fetchPolicy: "network-only" } })(
+//     withRouter(CreateUser)
+//   )
+// );
+
+export default graphql(userQuery, { options: { fetchPolicy: "network-only" } })(
+  graphql(createUser, { name: "createUser" })(withRouter(CreateUser))
 );

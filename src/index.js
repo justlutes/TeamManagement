@@ -14,6 +14,7 @@ import Auth from "./util/Auth";
 import Dashboard from "./components/Dashboard/Dashboard";
 import TeamList from "./components/TeamList/TeamList";
 import CreateUser from "./components/CreateUser";
+import NoMatch from "./NoMatch";
 import registerServiceWorker from "./registerServiceWorker";
 
 const auth = new Auth();
@@ -54,13 +55,14 @@ const Root = () => {
             component={props => <CreateUser auth={auth} />}
           />
           <Route
-            path="/teamlist"
-            component={props => <TeamList auth={auth} />}
+            path="/:userId/teamlist"
+            component={props => <TeamList auth={auth} {...props} />}
           />
           <Route
-            path="/:id/dashboard"
+            path="/:teamId/dashboard"
             component={props => <Dashboard auth={auth} {...props} />}
           />
+          <Route component={NoMatch} />
         </div>
       </Router>
     </ApolloProvider>

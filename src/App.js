@@ -3,14 +3,6 @@ import { graphql, gql } from "react-apollo";
 import { withRouter, Redirect } from "react-router-dom";
 
 class App extends React.Component {
-  componentDidMount() {
-    this.props.auth._showLock();
-  }
-
-  showLock = () => {
-    this.props.auth._showLock();
-  };
-
   _isLoggedIn = () => {
     return this.props.data.user;
   };
@@ -21,10 +13,10 @@ class App extends React.Component {
     }
 
     if (this._isLoggedIn()) {
-      return <Redirect to="/dashboard" />;
+      return <Redirect to={`/${this.props.data.user.id}/teamlist`} />;
     }
 
-    return <div id="home-lock" />;
+    return <div>{this.props.auth._showLock()}</div>;
   }
 }
 

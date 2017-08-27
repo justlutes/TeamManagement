@@ -1,6 +1,6 @@
 import React from "react";
 import { graphql, gql } from "react-apollo";
-import { withRouter, Redirect } from "react-router-dom";
+import { withRouter } from "react-router-dom";
 import styled from "styled-components";
 import Loading from "react-loading-animation";
 
@@ -18,20 +18,16 @@ class TeamList extends React.Component {
       return <Loading style={loadingStyle} />;
     }
 
-    if (!this.props.data.user) {
-      return <Redirect to="/" />;
-    }
-
     return (
       <Wrapper>
         <Header />
         <Grid>
-          <TeamRow teams={this.props.data.user.teams} />
+          <TeamRow teams={this.props.data.User.teams} />
         </Grid>
         <Footer
           auth={this.props.auth}
-          name={this.props.data.user.name}
-          picture={this.props.data.user.avatar}
+          name={this.props.data.User.name}
+          picture={this.props.data.User.avatar}
           fullWidth={"fullwidth"}
         />
       </Wrapper>
@@ -40,8 +36,8 @@ class TeamList extends React.Component {
 }
 
 const userQuery = gql`
-  query {
-    user {
+  query userQuery($id: ID!) {
+    User(id: $id) {
       name
       avatar
       teams {
@@ -66,6 +62,8 @@ const Wrapper = styled.div`
   flex-direction: column;
 `;
 
-export default graphql(userQuery, { options: { fetchPolicy: "network-only" } })(
-  withRouter(TeamList)
-);
+export default graphql(userQuery, {
+  options: props => {
+    return { variables: { id: props.match.params.userId } };
+  }
+})(withRouter(TeamList));
