@@ -39,6 +39,7 @@ const Wrapper = styled.div`
     height: 60px;
     background-color: #4a148c;
     border-radius: 0 0 5px 0;
+    z-index: 2;
 `;
 
 export default DashboardHeader;

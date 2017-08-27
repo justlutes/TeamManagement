@@ -28,6 +28,8 @@ const Wrapper = styled.div`
     bottom: 0;
     left: 0;
     width: 325px;
+    border-radius: 0 5px 0 0;
+    z-index: 2;
 `;
 
 const Inner = styled.div`

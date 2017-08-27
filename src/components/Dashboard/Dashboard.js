@@ -6,6 +6,7 @@ import styled from "styled-components";
 
 import DashboardMenu from "./DashboardMenu";
 import DashboardHeader from "./DashboardHeader";
+import DashboardHome from "./DashboardHome";
 
 class Dashboard extends React.Component {
   render() {
@@ -15,16 +16,18 @@ class Dashboard extends React.Component {
 
     return (
       <Wrapper>
-        <DashboardHeader
-          name={this.props.data.Team.name}
-          avatar={this.props.data.Team.avatar}
-        />
-        <DashboardMenu
-          path={this.props.location.pathname}
-          id={this.props.data.Team.id}
-          auth={this.props.auth}
-          user={this.props.data.Team.user}
-        />
+        <InnerWrapper>
+          <DashboardHeader
+            name={this.props.data.Team.name}
+            avatar={this.props.data.Team.avatar}
+          />
+          <DashboardMenu
+            id={this.props.data.Team.id}
+            auth={this.props.auth}
+            user={this.props.data.Team.user}
+          />
+        </InnerWrapper>
+        <DashboardHome groups={this.props.data.Team.teamGroups} />
       </Wrapper>
     );
   }
@@ -34,10 +37,15 @@ const loadingStyle = {
   top: "50vh"
 };
 
-const Wrapper = styled.div`
+const InnerWrapper = styled.div`
   display: flex;
   flex-direction: column;
-  width: 100%;
+`;
+
+const Wrapper = styled.div`
+  display: flex;
+  flex-direction: row;
+  background: #f5f5f5;
 `;
 
 const teamQuery = gql`
@@ -46,6 +54,9 @@ const teamQuery = gql`
       id
       name
       avatar
+      teamGroups {
+        id
+      }
       user {
         name
         avatar
